@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 import Paper from '@material-ui/core/Paper';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import TextField from "@material-ui/core/TextField";
@@ -24,8 +28,13 @@ let socket = new WebSocket(`${endPoint}`);
 const useStyles = makeStyles((theme: Theme) =>
 createStyles({
   root: {
-    maxWidth: 400,
+    width: '100%',
+    // maxWidth: 400,
     minWidth: 275,
+  },
+  cardroot: {
+    maxHeight: 250,
+    overflowY: 'scroll',
   },
   orange: {
     color: theme.palette.getContrastText(deepOrange[500]),
@@ -75,9 +84,13 @@ const App = () => {
     
   }, [messages.length]);
 
+  // メッセージ追加でチャットエリアのスクロールを一番下へ
+  useEffect(() => {
+    var chatAreaHeight = document.getElementById("chatarea")!.scrollHeight
+    document.getElementById("chatarea")!.scrollTop=chatAreaHeight
+  }, [messages.length])
+
   const classes = useStyles();
-
-
 
   const handleChange = (value: React.SetStateAction<string>) => {
     setMessage(value);
@@ -102,60 +115,67 @@ const App = () => {
 
   return (
     <React.Fragment>
-      <Card className={classes.root}>
-        <CardContent>
-          {messages.map((msg, index) => {
-            return (
-              <div style={{ width: '100%' }} key={index}>
-                {msg.speaker === 'BOT' && (
-                  <Box display="flex" justifyContent="flex-start">
-                    <Avatar>
-                      <AdbIcon />
-                    </Avatar>
-                    <Paper style={{ width: '70%' }} >
-                      {msg.text}
-                    </Paper>
+      <Accordion style={{ width: 450, position: 'fixed', bottom: '16px', right: '16px'}}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content">
+          
+        </AccordionSummary>
+        <AccordionDetails>
+          <Card className={classes.root}>
+            <CardContent className={classes.cardroot} id="chatarea">
+              {messages.map((msg, index) => {
+                return (
+                  <div style={{ width: '100%' }} key={index}>
+                    {msg.speaker === 'BOT' && (
+                      <Box display="flex" justifyContent="flex-start">
+                        <Avatar>
+                          <AdbIcon />
+                        </Avatar>
+                        <Paper style={{ width: '70%' }} >
+                          {msg.text}
+                        </Paper>
 
-                  </Box>
-                )}
-                {msg.speaker === 'USER' && (
-                  <Box display="flex" p={1} m={1} justifyContent="flex-end">
-                    <Paper style={{ width: '70%' }} >
-                      {msg.text}
-                    </Paper>
-                    <Avatar>
-                      <AccountCircleIcon />
-                    </Avatar>
-                  </Box>
-                )}
-              </div>
-            )
+                      </Box>
+                    )}
+                    {msg.speaker === 'USER' && (
+                      <Box display="flex" p={1} m={1} justifyContent="flex-end">
+                        <Paper style={{ width: '70%' }} >
+                          {msg.text}
+                        </Paper>
+                        <Avatar>
+                          <AccountCircleIcon />
+                        </Avatar>
+                      </Box>
+                    )}
+                  </div>
+                )
 
-          })
+              })
 
-          }
-          <Divider/>
-        </CardContent>
-        <CardActions>
-          <Box display="flex" justifyContent="center" className={classes.paper}>
-            <Avatar className={classes.large}>
-              <AccountCircleIcon />
-            </Avatar>
-            {/* <input value={message} name="message" onChange={e => handleChange(e)} /> */}
-            <TextField
-              multiline
-              maxRows={4} 
-              variant="outlined" 
-              value={message} 
-              name="message" 
-              onChange={(event) => handleChange(event.target.value)}
-            />
-            <Button variant="contained" color="primary" onClick={() => onClick()}>Send Message</Button>
-          </Box>
+              }
+              <Divider/>
+            </CardContent>
+            <CardActions>
+              <Box display="flex" justifyContent="center" className={classes.paper}>
+                <Avatar className={classes.large}>
+                  <AccountCircleIcon />
+                </Avatar>
+                {/* <input value={message} name="message" onChange={e => handleChange(e)} /> */}
+                <TextField
+                  multiline
+                  maxRows={4} 
+                  variant="outlined" 
+                  value={message} 
+                  name="message" 
+                  onChange={(event) => handleChange(event.target.value)}
+                />
+                <Button variant="contained" color="primary" onClick={() => onClick()}>Send Message</Button>
+              </Box>
 
-          </CardActions>
+              </CardActions>
 
-      </Card>
+          </Card>
+        </AccordionDetails>
+      </Accordion>
     </React.Fragment>
   )
 }
