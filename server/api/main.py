@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from chatbot.testbot import TestBot
 
+import time
+
 app = FastAPI()
 
 origins = [
@@ -70,9 +72,11 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             data = await websocket.receive_text()
             reply = bot.reply(data)
-            await websocket.send_text(reply)
+            if reply:
+                await websocket.send_text(reply)
+
     except:
-        await websocket.close()
+        await websocket.close()    
 
 if __name__ == "__main__":
     import uvicorn
