@@ -2,15 +2,23 @@ import json
 import random
 import requests
 
+from nlu_models.posneg_classifier import PosNegClassifier
+
 class TestBot():
     def __init__(self):
         with open('./api/chatbot/messages.json', 'r') as f:
             self.messages = json.load(f)
 
+        with open('./api/chatbot/replies_positive.json', 'r') as f:
+            self.pos_replies = json.load(f)
+
+        with open('./api/chatbot/replies_negative.json', 'r') as f:
+            self.neg_replies = json.load(f)
+
         self.activated = False
+        self.posneg_classifier = PosNegClassifier()
 
     def reply(self, msg):
-
         if msg == "activated":
             self.activated = True
             msg_for_reply = None
@@ -19,9 +27,20 @@ class TestBot():
             msg_for_reply = self._weather_reply()
         
         else:
-            msg_candidates = self.messages["test_messages"]
-            reply_ind = random.randint(0, len(msg_candidates)-1)
-            msg_for_reply = msg_candidates[reply_ind]
+            print(msg)
+            posneg = self.posneg_classifier.predict(msg)["label"]
+            print(posneg)
+
+            if posneg == "ポジティブ":
+                msg_candidates = self.pos_replies["messages"]
+                reply_ind = random.randint(0, len(msg_candidates)-1)
+                msg_for_reply = msg_candidates[reply_ind]
+            else:
+                msg_candidates = self.neg_replies["messages"]
+                reply_ind = random.randint(0, len(msg_candidates)-1)
+                msg_for_reply = msg_candidates[reply_ind]
+
+
 
         return msg_for_reply
 
