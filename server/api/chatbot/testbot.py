@@ -2,10 +2,13 @@ import json
 import random
 import requests
 
+from dotenv import load_dotenv
+
 from nlu_models.posneg_classifier import PosNegClassifier
 
 class TestBot():
-    def __init__(self):
+    def __init__(self, weather_api_key):
+        self.weather_api_key = weather_api_key
         with open('./api/chatbot/messages.json', 'r') as f:
             self.messages = json.load(f)
 
@@ -54,7 +57,7 @@ class TestBot():
 
 
     def _weather_reply(self):
-        API_KEY = '85dfe16ce798f29f97f7ddc7df4a29df'
+        API_KEY = self.weather_api_key
         city = 'Tokyo'
 
         params = (

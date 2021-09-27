@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from chatbot.testbot import TestBot
 
-import time
+import settings
 
 app = FastAPI()
 
@@ -22,47 +22,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-bot = TestBot()
-
-# html = """
-# <!DOCTYPE html>
-# <html>
-#     <head>
-#         <title>Chat</title>
-#     </head>
-#     <body>
-#         <h1>WebSocket Chat</h1>
-#         <form action="" onsubmit="sendMessage(event)">
-#             <input type="text" id="messageText" autocomplete="off"/>
-#             <button>Send</button>
-#         </form>
-#         <div id="yourMessage">
-#         </div>
-#         <div id='replyMessage'>
-#         </div>
-#         <script>
-#             var ws = new WebSocket("ws://localhost:5000/ws");
-#             ws.onmessage = function(event) {
-#                 var content = document.createTextNode(event.data)
-                
-#                 document.getElementById('replyMessage').innerHTML = "BOT'S REPLY: " + event.data
-#             };
-#             function sendMessage(event) {
-#                 var input = document.getElementById("messageText")
-#                 document.getElementById('yourMessage').innerHTML = "YOUR INPUT: " + input.value
-#                 ws.send(input.value)
-#                 input.value = ''
-#                 event.preventDefault()
-#             }
-#         </script>
-#     </body>
-# </html>
-# """
-
-
-# @app.get("/")
-# async def get():
-#     return HTMLResponse(html)
+bot = TestBot(settings.WEATHER_API_KEY)
 
 
 @app.websocket("/ws")
