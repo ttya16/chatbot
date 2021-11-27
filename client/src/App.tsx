@@ -21,10 +21,12 @@ const App = () => {
   return (
     <div className="app">
         <Layout style={{ minHeight: '100vh' }}>
-          <Sider>
-            <Navbar />
+          <Sider width={320}>
+            <div className="navbar">
+              <Navbar />
+            </div>
           </Sider>
-          <Layout>            
+          <Layout className="main">            
             <Content style={{ margin: '0 16px', position: 'relative' }}>
               <div className="routes">
                 <Switch>
@@ -32,7 +34,6 @@ const App = () => {
                     <Homepage />
                   </Route>
                 </Switch>
-               
               </div>
               <ChatWindow {...chatbotProps} />
             </Content>
