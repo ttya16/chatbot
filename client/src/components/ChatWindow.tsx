@@ -14,7 +14,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import TextField from "@material-ui/core/TextField";
-import Avatar from '@material-ui/core/Avatar';
+
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import AdbIcon from '@material-ui/icons/Adb';
 
@@ -22,6 +22,10 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { deepOrange, deepPurple } from '@material-ui/core/colors';
 import { isConstructorDeclaration } from 'typescript';
 import { Typography } from '@material-ui/core';
+
+import { Avatar } from "antd";
+import { UserOutlined } from '@ant-design/icons';
+import icon from "../images/icon.png";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -126,7 +130,7 @@ const ChatWindow = (props: any) => {
 
     return (
     <React.Fragment>
-        <Accordion style={{ width: 450, position: 'fixed', bottom: '16px', right: '16px'}} onChange={() => onAccordionExpand()}>
+        <Accordion style={{ width: "33%", position: 'absolute', bottom: '10px', right: '16px'}} onChange={() => onAccordionExpand()}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content">
             <Typography variant="button">Try Chatbot from here!</Typography>
         </AccordionSummary>
@@ -138,9 +142,7 @@ const ChatWindow = (props: any) => {
                     <div style={{ width: '100%' }} key={index}>
                     {msg.speaker === 'BOT' && (
                         <Box display="flex" p={1} m={1} justifyContent="flex-start">
-                        <Avatar>
-                            <AdbIcon />
-                        </Avatar>
+                            <Avatar src={icon} size="large" />
                         <Paper style={{ width: '70%' }} >
                             {msg.text}
                         </Paper>
@@ -167,9 +169,7 @@ const ChatWindow = (props: any) => {
             </CardContent>
             <CardActions>
                 <Box display="flex" justifyContent="center" className={classes.paper}>
-                <Avatar className={classes.large}>
-                    <AccountCircleIcon />
-                </Avatar>
+                <Avatar icon={<UserOutlined />} size="large" />
                 {/* <input value={message} name="message" onChange={e => handleChange(e)} /> */}
                 <TextField
                     multiline

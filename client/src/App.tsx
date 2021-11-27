@@ -1,19 +1,13 @@
 import React from 'react';
 import './App.css';
 
-import Box from '@material-ui/core/Box';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import { Divider, Typography } from '@material-ui/core';
-
-import { teal } from "@material-ui/core/colors";
-import { createTheme } from '@material-ui/core/styles';
-import { ThemeProvider } from "@material-ui/styles";
-
-import TopBar from './components/TopBar';
-import ChatWindow from './components/ChatWindow';
+import { Switch, Route, Link } from 'react-router-dom';
+import { Layout, Typography, Space } from 'antd'
 
 
+import { Navbar, Homepage, ChatWindow, TopBar } from './components';
+
+const { Header, Footer, Sider, Content } = Layout;
 
 // let socket = new WebSocket(`${endPoint}`);
 
@@ -24,23 +18,44 @@ const App = () => {
     socket: new WebSocket(`${endPoint}`)
   }
 
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: teal[500]
-      },
-      secondary: {
-        main: "#00bcd4"
-      }
-    }
-  })
-
   return (
-    <ThemeProvider theme={theme}>
-      <TopBar />
-      <Divider />
-      <ChatWindow {...chatbotProps} />
-    </ThemeProvider>
+    <div className="app">
+        <Layout style={{ minHeight: '100vh' }}>
+          <Sider>
+            <Navbar />
+          </Sider>
+          <Layout>            
+            <Content style={{ margin: '0 16px', position: 'relative' }}>
+              <div className="routes">
+                <Switch>
+                  <Route exact path="/">
+                    <Homepage />
+                  </Route>
+                </Switch>
+               
+              </div>
+              <ChatWindow {...chatbotProps} />
+            </Content>
+            <Footer>
+              <div className="footer">
+                <Typography.Title level={5} style={{ color: 'white'}}>
+                  ttya16's Tech Gar(b)age <br />
+                  All rights reserved
+                </Typography.Title>
+                <Space>
+                  <Link to="/">Home</Link>
+                  <Link to="/cryptocurrencies">Cryptocurrencies</Link>
+                </Space>
+              </div>
+            </Footer>
+          </Layout>
+
+        </Layout>
+
+      
+        {/* <TopBar /> */}
+
+    </div>
   )
 }
 

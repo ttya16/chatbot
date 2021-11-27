@@ -17,7 +17,6 @@ const TopBar = () => {
             <AppBar position="static" color="primary">
                 <Box display="flex" p={1}>
                     <Box flexGrow={1}>
-                        <Typography variant="h5">ttya16's Tech Garage</Typography>
                     </Box>
                     <Box display="inline">
                         <IconButton aria-label="https://github.com/ttya16" onClick={() => window.open('https://github.com/ttya16')}>
